@@ -63,15 +63,18 @@ def _build_azure_llm(model_string: str) -> LLM:
         f"Azure OpenAI → base_url={azure_base_url}  api_version={api_version}"
     )
 
-    # Do NOT pass api_version as a top-level kwarg — the OpenAICompletion
-    # provider passes it to Completions.create() which doesn't accept it.
-    # Instead, put it in default_query so the OpenAI SDK appends it as a URL
-    # query parameter (?api-version=...) on every request.
+    # Pass default_query directly as a top-level kwarg.
+    # LLM.__new__ forwards all kwargs straight to OpenAICompletion, which has
+    # default_query as a proper Pydantic field. The OpenAI SDK client receives
+    # it and appends ?api-version=... to every request URL — exactly what
+    # Azure OpenAI requires.
+    # Do NOT use api_version or additional_params — both end up in
+    # Completions.create() which rejects them with "unexpected keyword argument".
     return LLM(
         model=f"openai/{deployment}",
         api_key=api_key,
         api_base=azure_base_url,
-        additional_params={"default_query": {"api-version": api_version}},
+        default_query={"api-version": api_version},
     )
 
 
