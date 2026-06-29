@@ -1,0 +1,41 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# tasks.yaml
+# This is where you define the actual work the agents do.
+#
+# Each task has:
+#   agent          → which agent from agents.yaml runs this task
+#   description    → exact instructions for the agent (be specific here)
+#   expected_output→ what a successful result looks like
+#   depends_on     → list of task keys that must finish before this one starts
+#                    empty list [] means it runs first / immediately
+#
+# Tasks run in the order their depends_on chain resolves.
+# Tasks with no shared dependencies can run in parallel (set process: parallel in config.yaml)
+# ─────────────────────────────────────────────────────────────────────────────
+
+investigate_ticket:
+  agent: it_support_agent
+  description: >
+    You are handling IT support ticket VPN-101.
+    Step 1: Use knowledge.search to look up VPN troubleshooting steps.
+    Step 2: Use jira.get_issue with ticket_id "VPN-101" to read the full ticket details.
+    Summarise the root cause and the recommended fix based on what you find.
+  expected_output: >
+    A clear explanation of the VPN issue root cause and a recommended resolution
+    plan with specific steps the user should follow.
+  depends_on: []
+
+resolve_ticket:
+  agent: it_support_agent
+  description: >
+    Based on the investigation findings from the previous task:
+    Step 1: Use servicenow.create_ticket to log the incident with a description
+            of "VPN-101 - User cannot connect to Cisco VPN. Root cause: SSO group issue."
+    Step 2: Use outlook.send_email to notify the affected user at john.doe@company.com
+            with subject "Your VPN Issue Has Been Resolved" and a body that explains
+            the fix they need to apply.
+  expected_output: >
+    Confirmation that the ServiceNow ticket was created and the email was sent
+    to the user.
+  depends_on:
+    - investigate_ticket

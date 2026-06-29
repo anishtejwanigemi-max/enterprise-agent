@@ -1,0 +1,14 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# rbac.yaml
+# Controls which agent is allowed to call which tools.
+# Supports wildcards: jira.* means all jira tools.
+# If this file does not exist, all tools are open to all agents.
+# ─────────────────────────────────────────────────────────────────────────────
+
+roles:
+  it_support_agent:
+    allowed_tools:
+      - jira.*
+      - servicenow.*
+      - outlook.send_email
+      - knowledge.search

@@ -1,5 +1,33 @@
-Company VPN Policy Runbook:
+Company IT Runbook — VPN Troubleshooting Guide
+===============================================
 
-If VPN fails, check if the SSO status is active.
-Default VPN Client URL: client.company.com.
-IT Support Desk email: support@company.com.
+Issue: User cannot connect to Cisco AnyConnect VPN (Error 403 / Authentication Failed)
+
+Root Cause:
+The most common cause of VPN Error 403 is that the user's Active Directory account
+is not in the VPN-Access-Active security group. This group is required for SSO
+authentication to pass through the Cisco VPN gateway.
+
+Resolution Steps:
+1. Verify the user's AD group membership includes "VPN-Access-Active".
+2. If missing, raise an access request via ServiceNow for the user's manager to approve.
+3. Once the group is added, ask the user to wait 15 minutes for AD sync, then retry.
+4. VPN client URL: vpn.company.net
+5. If the user still cannot connect after group add, clear the AnyConnect profile
+   cache at: C:\ProgramData\Cisco\Cisco AnyConnect Secure Mobility Client\Profile
+
+IT Support Desk: support@company.com
+Emergency VPN Hotline: +1-800-555-0199
+
+---
+
+Onboarding Checklist
+====================
+New hire onboarding steps:
+1. Create corporate email in Azure AD
+2. Assign M365 license
+3. Add to VPN-Access-Active group
+4. Provision laptop via JAMF/Intune
+5. Send welcome email with credentials and first-day agenda
+
+HR Contact: hr@company.com

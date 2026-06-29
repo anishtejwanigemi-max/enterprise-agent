@@ -1,0 +1,34 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# memory.yaml
+# Configures the knowledge base that agents search via knowledge.search tool.
+# ─────────────────────────────────────────────────────────────────────────────
+
+memory:
+  conversation: true
+  persistent:
+    backend: redis            # redis for persistent memory (optional)
+    ttl_days: 30
+
+  knowledge:
+    vector_store: chroma      # chroma = local file-based (no setup needed)
+                              # pgvector = postgres (production)
+    chunk_size: 512
+    chunk_overlap: 64
+    embedding_model: text-embedding-3-small
+
+    sources:
+      # Local text file — works out of the box, no credentials needed
+      - type: text
+        path: ./docs/runbook.txt
+
+      # Confluence — comment out if you don't have credentials yet
+      # - type: confluence
+      #   base_url: https://your-company.atlassian.net/wiki
+      #   space: IT_DOCS
+      #   auth: env:CONFLUENCE_TOKEN
+
+      # SharePoint — comment out if you don't have credentials yet
+      # - type: sharepoint
+      #   site: https://your-company.sharepoint.com/sites/HR
+      #   folder: /Policies
+      #   auth: env:SHAREPOINT_TOKEN

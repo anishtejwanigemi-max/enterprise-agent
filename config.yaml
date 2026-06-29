@@ -1,0 +1,35 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# config.yaml
+# Global settings for the crew.
+# ─────────────────────────────────────────────────────────────────────────────
+
+secrets_backend: env          # where to read API keys from (env | vault | aws)
+max_steps_default: 15         # max reasoning steps per agent before it stops
+process: sequential           # sequential | parallel | hierarchical
+
+# Default LLM used when an agent does not declare its own llm field.
+# Change this one line to switch ALL agents to a different provider instantly.
+# Examples:
+#   azure/gpt-4o
+#   openai/gpt-4o
+#   anthropic/claude-3-5-sonnet-20241022
+#   ollama/llama3
+#   groq/llama3-70b-8192
+default_llm: azure/gpt-4o
+
+llm_costs:
+  azure/gpt-4o:
+    input_per_1k: 0.005
+    output_per_1k: 0.015
+  openai/gpt-4o:
+    input_per_1k: 0.005
+    output_per_1k: 0.015
+  anthropic/claude-3-5-sonnet-20241022:
+    input_per_1k: 0.003
+    output_per_1k: 0.015
+  google/gemini-1.5-pro:
+    input_per_1k: 0.00125
+    output_per_1k: 0.00375
+  groq/llama3-70b-8192:
+    input_per_1k: 0.00059
+    output_per_1k: 0.00079
